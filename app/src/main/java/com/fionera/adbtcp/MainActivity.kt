@@ -4,6 +4,7 @@ import android.annotation.TargetApi
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import com.fionera.adbtcp.adapter.InterfaceInfoListAdapter
@@ -33,8 +34,11 @@ class MainActivity : BaseActivity() {
         }
 
         btn_set_port_directly.setOnClickListener {
-            val port = et_tcp_port_to_use.text.toString()
-            if (port == "" || port.length < 4) {
+            var port = et_tcp_port_to_use.text.toString()
+            if (TextUtils.isEmpty(port)) {
+                port = "5555"
+            }
+            if (port.length < 4) {
                 Toast.makeText(mContext, "Port Illegal: " + port, Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
@@ -65,7 +69,7 @@ class MainActivity : BaseActivity() {
                 interfaceInfoListTemp
             }
 
-            tv_current_prop_wifi_address.text = getString(R.string.current_prop_tcp_port_1_s, getWifiAddressDefer.await())
+            tv_current_prop_wifi_address.text = getString(R.string.current_prop_wifi_address_1_s, getWifiAddressDefer.await())
             tv_current_prop_tcp_port.text = getString(R.string.current_prop_tcp_port_1_s, getTcpPortDefer.await())
 
             interfaceInfoList.clear()
