@@ -29,7 +29,7 @@ class InterfaceInfoListAdapter(val context: Context, val dataList: List<NetworkI
         holder.tv_interface_info_ip_address.text = inetAddrsInfo
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
             = InterfaceInfoHolder(LayoutInflater.from(context).inflate(R.layout.item_rv_interface_info, parent, false))
 
     override fun getItemCount() = dataList.size
