@@ -10,9 +10,10 @@ import android.widget.Toast
 import com.fionera.adbtcp.adapter.InterfaceInfoListAdapter
 import com.fionera.adbtcp.util.CommandExecutor
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.net.NetworkInterface
 
 class MainActivity : BaseActivity() {
@@ -51,7 +52,8 @@ class MainActivity : BaseActivity() {
     }
 
     private fun refreshDeviceProp() {
-        launch(UI) {
+        tv_using_ip_for_forward.text = getString(R.string.using_ip_for_forward_1_s, "")
+        GlobalScope.launch(Dispatchers.Main) {
             val getWifiAddressDefer = async {
                 CommandExecutor.execCommand(getString(R.string.commands_to_get_ip_on_wlan0))
             }
@@ -69,12 +71,13 @@ class MainActivity : BaseActivity() {
                 interfaceInfoListTemp
             }
 
+            // "dhcp.wlan0.ipaddress" maybe empty
             tv_current_prop_wifi_address.text = getString(R.string.current_prop_wifi_address_1_s, getWifiAddressDefer.await())
             tv_current_prop_tcp_port.text = getString(R.string.current_prop_tcp_port_1_s, getTcpPortDefer.await())
 
             interfaceInfoList.clear()
             interfaceInfoList.addAll(interfaceInfoListDefer.await())
-            rv_tcp_ip_list.adapter.notifyDataSetChanged()
+            rv_tcp_ip_list.adapter?.notifyDataSetChanged()
         }
     }
 

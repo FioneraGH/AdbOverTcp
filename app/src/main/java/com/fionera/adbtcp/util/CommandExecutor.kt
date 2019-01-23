@@ -17,7 +17,7 @@ class CommandExecutor {
                 val process = Runtime.getRuntime().exec(command)
 
                 val reader = BufferedReader(InputStreamReader(process.inputStream))
-                var read = 0
+                var read: Int
                 val buffer = CharArray(4096)
                 val output = StringBuffer()
                 while ((reader.read(buffer).apply { read = this }) > 0) {
